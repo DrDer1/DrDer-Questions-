@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>DrDer Questions</title>
+    
+    <!-- PWA Meta -->
+    <meta name="theme-color" content="#0a0a14">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DrDer Questions">
+    <meta name="description" content="لعبة أسئلة ثقافية - 1000+ سؤال">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Apple Icons -->
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+
+    <style>
+        :root {
+            --bg: #0a0a14;
+            --dark: #1e1e2e;
+            --gold: #ffc800;
+            --white: #ffffff;
+            --green: #3cff50;
+            --red: #e63c3c;
+            --gray: #888888;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: var(--bg);
+            color: var(--white);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            overflow: hidden;
+            direction: rtl;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 500px;
+            height: 100vh;
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* شريط العنوان الدائم */
+        .app-header {
+            background: var(--dark);
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 2px solid var(--gold);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .app-header .header-icon {
+            font-size: 1.8em;
+            color: var(--gold);
+            font-weight: bold;
+            background: #2a2a00;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--gold);
+        }
+
+        .app-header .header-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .menu {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-icon {
+            font-size: 5em;
+            color: var(--gold);
+            font-weight: bold;
+            background: #1a1a00;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid var(--gold);
+            text-shadow: 0 0 30px rgba(255, 200, 0, 0.5);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 200, 0, 0.3); }
+            50% { box-shadow: 0 0 50px rgba(255, 200, 0, 0.6); }
+        }
+
+        .menu-game-name {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(255, 200, 0, 0.3);
+        }
+
+        .btn {
+            width: 80%;
+            max-width: 300px;
+            padding: 16px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            cursor: pointer;
+            background: var(--dark);
+            color: var(--white);
+            font-family: 'Arial', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover, .btn:active {
+            transform: scale(1.03);
+            background: #2a2a3e;
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--bg);
+            border-color: var(--gold);
+        }
+
+        .btn-primary:hover, .btn-primary:active {
+            background: #ffd633;
+        }
+
+        .btn-danger {
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        .btn-danger:hover, .btn-danger:active {
+            background: #3a1a1a;
+        }
+
+        .game-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 12px;
+            background: var(--dark);
+            border-radius: 10px;
+            font-size: 1em;
+            flex-shrink: 0;
+        }
+
+        .game-stats .correct-count { color: var(--green); font-weight: bold; }
+        .game-stats .wrong-count { color: var(--red); font-weight: bold; }
+
+        .question-area {
+            text-align: center;
+            padding: 15px 5px;
+            font-size: 1.4em;
+            font-weight: bold;
+            line-height: 1.5;
+            min-height: 60px;
+            word-wrap: break-word;
+            flex-shrink: 0;
+        }
+
+        .message {
+            text-align: center;
+            font-size: 1.1em;
+            min-height: 26px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .message.correct-msg { color: var(--green); }
+        .message.wrong-msg { color: var(--red); }
+        .message.info-msg { color: var(--gold); }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .option-btn {
+            padding: 14px 8px;
+            font-size: 1em;
+            font-weight: bold;
+            border: 2px solid var(--gray);
+            border-radius: 12px;
+            cursor: pointer;
+            background: var(--dark);
+            color: var(--white);
+            text-align: center;
+            word-wrap: break-word;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .option-btn:hover, .option-btn:active {
+            background: #2a2a3e;
+            border-color: var(--white);
+        }
+
+        .option-btn.correct-btn {
+            background: #1a3a1a !important;
+            border-color: var(--green) !important;
+            color: var(--green) !important;
+        }
+
+        .option-btn.wrong-btn {
+            background: #3a1a1a !important;
+            border-color: var(--red) !important;
+            color: var(--red) !important;
+        }
+
+        .option-btn:disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .skip-btn {
+            padding: 14px;
+            font-size: 1em;
+            border: 1px solid var(--gray);
+            border-radius: 10px;
+            cursor: pointer;
+            background: transparent;
+            color: var(--gray);
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .skip-btn:hover, .skip-btn:active {
+            background: var(--dark);
+            color: var(--white);
+        }
+
+        .hidden { display: none !important; }
+
+        .end-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .end-screen .end-title {
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        .end-screen .end-stats {
+            font-size: 1.3em;
+            line-height: 2;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* تلميح التثبيت */
+        .install-prompt {
+            background: var(--dark);
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .install-prompt button {
+            background: var(--gold);
+            color: var(--bg);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            font-family: 'Arial', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container" id="container">
+        <!-- شريط العنوان الدائم -->
+        <div class="app-header">
+            <div class="header-icon">؟</div>
+            <span class="header-title">DrDer Questions</span>
+        </div>
+
+        <div class="content-area" id="contentArea">
+            <!-- القائمة الرئيسية -->
+            <div class="menu fade-in" id="menu">
+                <div class="menu-icon">؟</div>
+                <div class="menu-game-name">DrDer Questions</div>
+                <button class="btn btn-primary" onclick="newGame()">🎮 لعبة جديدة</button>
+                <button class="btn" onclick="continueGame()">▶ متابعة</button>
+                <button class="btn btn-danger" onclick="exitGame()">✕ خروج</button>
+                <div class="install-prompt hidden" id="installPrompt">
+                    <p>📲 ثبّت التطبيق على جهازك</p>
+                    <button onclick="installApp()">تثبيت الآن</button>
+                </div>
+            </div>
+
+            <!-- شاشة اللعبة -->
+            <div class="game-area hidden fade-in" id="game">
+                <div class="game-stats">
+                    <span class="correct-count">✅ صواب: <span id="correctCount">0</span></span>
+                    <span class="wrong-count">❌ خطأ: <span id="wrongCount">0</span></span>
+                </div>
+                <div class="question-area" id="questionText"></div>
+                <div class="message" id="messageText"></div>
+                <div class="options-grid" id="optionsGrid"></div>
+                <button class="skip-btn" onclick="skipQuestion()">⏭ تخطي</button>
+            </div>
+
+            <!-- شاشة النهاية -->
+            <div class="end-screen hidden fade-in" id="endScreen">
+                <div class="end-title">🎉 تهانينا!</div>
+                <div class="end-stats">
+                    <p>لقد أجبت على جميع الأسئلة!</p>
+                    <p style="color: var(--green);">✅ صواب: <span id="endCorrect">0</span></p>
+                    <p style="color: var(--red);">❌ خطأ: <span id="endWrong">0</span></p>
+                </div>
+                <button class="btn btn-primary" onclick="newGame()">🔄 لعبة جديدة</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
