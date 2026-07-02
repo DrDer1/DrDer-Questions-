@@ -1,0 +1,22 @@
+{
+  "name": "DrDer Questions",
+  "short_name": "DrDer",
+  "description": "لعبة أسئلة ثقافية - 1000 سؤال",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0a0a14",
+  "theme_color": "#0a0a14",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/Jw43YRGc/192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://i.ibb.co/dyqL46F/512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
