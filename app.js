@@ -161,7 +161,6 @@ class Game {
         this.plays = await this.db.getStat('plays', 0); this.best = await this.db.getStat('best', 0);
         this.avail = await this.db.get('avail', null);
         if (!this.avail || this.avail.length === 0) { this.resetAvail(); }
-        else { this.avail = this.avail; }
         this.menu(); this.pwa();
     }
     resetAvail() { this.avail = this.questions.map(q => q.id); shuffle(this.avail); this.saveAvail(); }
